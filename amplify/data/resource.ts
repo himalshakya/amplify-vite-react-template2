@@ -12,6 +12,104 @@ const schema = a.schema({
       content: a.string(),
     })
     .authorization(allow => [allow.owner()]),
+  
+  coursesv2: a.model({
+    id: a.id().required(),
+    subCategory: a.string().required(),
+    institution: a.string(),
+    title: a.string(),
+    credits: a.integer(),
+    prerequisites: a.string().array(),
+    corequisitess: a.string().array(),
+    includesLab: a.boolean(),
+    notes: a.string(),
+  }) 
+  .authorization(allow => [allow.owner()]),
+
+  State: a.model({
+    id: a.id().required(),
+    name: a.enum(['CO', 'CT', 'NY']),
+    displayName: a.string(),
+    Universities: a.hasMany('University', 'stateId'),
+  }) 
+  .authorization(allow => [allow.owner()]),
+
+  University: a.model({
+    id: a.id().required(),
+    name: a.enum(['COMMUNITY_COLLEGE_OF_AURORA', 'UNIVERSITY_OF_CONNECTICUT', 'DENVER_UNIVERSTITY', 'UNIVERSITY_OF_BRIDGEPORT', 'UNIVERSITY_OF_COLORADO']),
+    displayName: a.string(),
+    stateId: a.id(),
+    state: a.belongsTo('State', 'stateId'),
+    majors: a.hasMany('MajorUniversity', 'universityId'),
+    categories: a.hasMany('Category', 'universityId'),
+    students: a.hasMany('Student', 'universityId'),
+  })
+  .authorization(allow => [allow.owner()]),
+
+  Major: a.model({
+    id: a.id().required(),
+    name: a.string(),
+    minCredit: a.string(),
+    categories: a.hasMany('Category', 'majorId'),
+    universities: a.hasMany('MajorUniversity', 'majorId'),
+    student: a.hasOne('Student', 'majorId'),
+  })
+  .authorization(allow => [allow.owner()]),
+
+  Category: a.model({
+    id: a.id().required(),
+    minCredit: a.integer(),
+    name: a.string(),
+    majorId: a.id(),
+    major: a.belongsTo('Major', 'majorId'),
+    universityId: a.id(),
+    university: a.belongsTo('University', 'universityId'),
+    subCategories: a.hasMany('SubCategory', 'categoryId'),
+    categories: a.hasMany('Course', 'categoryId'),
+  })
+  .authorization(allow => [allow.owner()]),
+
+  SubCategory: a.model({
+    id: a.id().required(),
+    name: a.string(),
+    code: a.string(),
+    categoryId: a.id(),
+    category: a.belongsTo('Category', 'categoryId'),
+    courses: a.hasMany('Course', 'subCategoryId'),
+  })
+  .authorization(allow => [allow.owner()]),
+
+  Course: a.model({
+    id: a.id().required(),
+    code: a.string(),
+    name: a.string(),
+    credit: a.integer(),
+    categoryId: a.id(),
+    category: a.belongsTo('Category', 'categoryId'),
+    subCategoryId: a.id(),
+    subCategroies: a.belongsTo('SubCategory', 'subCategoryId'),
+  })
+  .authorization(allow => [allow.owner()]),
+
+  Student: a.model({
+    id: a.id().required(),
+    firstName: a.string(),
+    lastName: a.string(),
+    universityId: a.id(),
+    university: a.belongsTo('University', 'universityId'),
+    majorId: a.id(),
+    major: a.belongsTo('Major', 'majorId'),
+  })
+  .authorization(allow => [allow.owner()]),
+
+  MajorUniversity: a.model({
+    majorId: a.id().required(),
+    universityId: a.id().required(),
+    major: a.belongsTo('Major', 'majorId'),
+    university: a.belongsTo('University', 'universityId'),
+  })
+  .authorization(allow => [allow.owner()]),
+  
 });
 
 export type Schema = ClientSchema<typeof schema>;
