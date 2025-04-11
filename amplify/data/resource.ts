@@ -88,6 +88,7 @@ const schema = a.schema({
     category: a.belongsTo('Category', 'categoryId'),
     subCategoryId: a.id(),
     subCategroies: a.belongsTo('SubCategory', 'subCategoryId'),
+    userSelectedCourses: a.hasMany('UserSelectedCourse', 'courseId'),
   })
   .authorization(allow => [allow.owner()]),
 
@@ -107,6 +108,15 @@ const schema = a.schema({
     universityId: a.id().required(),
     major: a.belongsTo('Major', 'majorId'),
     university: a.belongsTo('University', 'universityId'),
+  })
+  .authorization(allow => [allow.owner()]),
+
+  UserSelectedCourse: a.model({
+    id: a.id().required(),
+    usesrId: a.id(),
+    completed: a.boolean(),
+    courseId: a.id(),
+    course: a.belongsTo('Course', 'courseId'),
   })
   .authorization(allow => [allow.owner()]),
   
