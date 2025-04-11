@@ -113,7 +113,7 @@ const schema = a.schema({
 
   UserSelectedCourse: a.model({
     id: a.id().required(),
-    usesrId: a.id(),
+    userId: a.id(),
     completed: a.boolean(),
     courseId: a.id(),
     course: a.belongsTo('Course', 'courseId'),
