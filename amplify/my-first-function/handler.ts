@@ -2,6 +2,11 @@ type CSVOptions = {
     delimiter?: string;
     skipEmptyLines?: boolean;
   };
+
+  type inputValue = {
+    graphqlMethod: string;
+    csvValue: string
+  }
   
   export function parseCSV(csv: string, options: CSVOptions = {}): Record<string, string>[] {
     const delimiter = options.delimiter || ',';
@@ -29,6 +34,8 @@ type CSVOptions = {
     return rows;
   }
 
-export const handler = async (event: unknown) => {
-    return "Hello from my first function! " + JSON.stringify(event);
+export const handler = async (event: inputValue) => {
+    const output = parseCSV(event.csvValue);
+
+    return "Hello from my first function! " + JSON.stringify(output);
   };
