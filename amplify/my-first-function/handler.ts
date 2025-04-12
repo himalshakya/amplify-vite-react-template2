@@ -1,3 +1,3 @@
-export const handler = async (event) => {
-    return "Hello from my first function!";
+export const handler = async (event: unknown) => {
+    return "Hello from my first function! " + event;
   };
