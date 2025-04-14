@@ -23,7 +23,8 @@ const schema = a.schema({
     corequisitess: a.string().array(),
     includesLab: a.boolean(),
     notes: a.string(),
-  }),
+  })
+  .authorization(allow => allow.publicApiKey()),
 
   State: a.model({
     id: a.id().required(),
