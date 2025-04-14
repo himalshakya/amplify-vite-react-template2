@@ -31,7 +31,7 @@ const schema = a.schema({
     name: a.enum(['CO', 'CT', 'NY']),
     displayName: a.string(),
     Universities: a.hasMany('University', 'stateId'),
-  }).authorization(allow => [allow.owner()]),
+  }).authorization(allow => [allow.owner(), allow.guest()]),
 
   University: a.model({
     id: a.id().required(),
@@ -128,9 +128,9 @@ export const data = defineData({
   authorizationModes: {
     // defaultAuthorizationMode: "apiKey",
     // // API Key is used for a.allow.public() rules
-    // apiKeyAuthorizationMode: {
-    //   expiresInDays: 30,
-    // },
+    apiKeyAuthorizationMode: {
+      expiresInDays: 30,
+    },
     defaultAuthorizationMode: 'userPool',
   },
 });
