@@ -24,15 +24,14 @@ const schema = a.schema({
     includesLab: a.boolean(),
     notes: a.string(),
   }) 
-  .authorization(allow => [allow.owner()]),
+  .authorization(allow => [allow.authenticated()]),
 
   State: a.model({
     id: a.id().required(),
     name: a.enum(['CO', 'CT', 'NY']),
     displayName: a.string(),
     Universities: a.hasMany('University', 'stateId'),
-  }) 
-  .authorization(allow => [allow.owner()]),
+  }).authorization(allow => [allow.authenticated()]),
 
   University: a.model({
     id: a.id().required(),
@@ -44,7 +43,7 @@ const schema = a.schema({
     categories: a.hasMany('Category', 'universityId'),
     students: a.hasMany('Student', 'universityId'),
   })
-  .authorization(allow => [allow.owner()]),
+  .authorization(allow => [allow.authenticated()]),
 
   Major: a.model({
     id: a.id().required(),
@@ -54,7 +53,7 @@ const schema = a.schema({
     universities: a.hasMany('MajorUniversity', 'majorId'),
     student: a.hasOne('Student', 'majorId'),
   })
-  .authorization(allow => [allow.owner()]),
+  .authorization(allow => [allow.authenticated()]),
 
   Category: a.model({
     id: a.id().required(),
@@ -67,7 +66,7 @@ const schema = a.schema({
     subCategories: a.hasMany('SubCategory', 'categoryId'),
     categories: a.hasMany('Course', 'categoryId'),
   })
-  .authorization(allow => [allow.owner()]),
+  .authorization(allow => [allow.authenticated()]),
 
   SubCategory: a.model({
     id: a.id().required(),
@@ -77,7 +76,7 @@ const schema = a.schema({
     category: a.belongsTo('Category', 'categoryId'),
     courses: a.hasMany('Course', 'subCategoryId'),
   })
-  .authorization(allow => [allow.owner()]),
+  .authorization(allow => [allow.authenticated()]),
 
   Course: a.model({
     id: a.id().required(),
@@ -90,7 +89,7 @@ const schema = a.schema({
     subCategroies: a.belongsTo('SubCategory', 'subCategoryId'),
     userSelectedCourses: a.hasMany('UserSelectedCourse', 'courseId'),
   })
-  .authorization(allow => [allow.owner()]),
+  .authorization(allow => [allow.authenticated()]),
 
   Student: a.model({
     id: a.id().required(),
@@ -101,7 +100,7 @@ const schema = a.schema({
     majorId: a.id(),
     major: a.belongsTo('Major', 'majorId'),
   })
-  .authorization(allow => [allow.owner()]),
+  .authorization(allow => [allow.authenticated()]),
 
   MajorUniversity: a.model({
     majorId: a.id().required(),
@@ -109,7 +108,7 @@ const schema = a.schema({
     major: a.belongsTo('Major', 'majorId'),
     university: a.belongsTo('University', 'universityId'),
   })
-  .authorization(allow => [allow.owner()]),
+  .authorization(allow => [allow.authenticated()]),
 
   UserSelectedCourse: a.model({
     id: a.id().required(),
